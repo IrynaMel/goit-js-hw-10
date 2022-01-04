@@ -11,35 +11,35 @@ import { fetchCountries } from '/js/fetchCountries'
 
 
 const input = document.querySelector('#search-box')
-const countryList = document.querySelector('.country-list')
-const countryInfo = document.querySelector('.country-info')
+const list = document.querySelector('.country-list')
+const info = document.querySelector('.country-info')
 
 input.addEventListener('input', debounce(onCountryInput, DEBOUNCE_DELAY))
 
 function onCountryInput() {
   const name = input.value.trim()
   if (!name) {
-    return (countryList.innerHTML = ''), (countryInfo.innerHTML = '')
+    return (list.innerHTML = ''), (info.innerHTML = '')
   }
 
   fetchCountries(name)
     .then(countries => {
-      countryList.innerHTML = ''
-      countryInfo.innerHTML = ''
+      list.innerHTML = ''
+      info.innerHTML = ''
       
       if (countries.length === 1) {
-        countryList.insertAdjacentHTML('beforeend', renderCountryList(countries))
-        countryInfo.insertAdjacentHTML('beforeend', renderCountryInfo(countries))
+        list.insertAdjacentHTML('beforeend', renderList(countries))
+        info.insertAdjacentHTML('beforeend', renderInfo(countries))
       } else if (countries.length > 10) {
         alertTooManyMatches()
       } else {
-        countryList.insertAdjacentHTML('beforeend', renderCountryList(countries))
+        list.insertAdjacentHTML('beforeend', renderList(countries))
       }
     })
     .catch(alertWrongName)
 }
 
-function renderCountryList(countries) {
+function renderList(countries) {
   const markup = countries
     .map(({ name, flags }) => {
       return `
@@ -53,7 +53,7 @@ function renderCountryList(countries) {
   return markup
 }
 
-function renderCountryInfo(countries) {
+function renderInfo(countries) {
   const markup = countries
     .map(({ capital, population, languages }) => {
       return `
